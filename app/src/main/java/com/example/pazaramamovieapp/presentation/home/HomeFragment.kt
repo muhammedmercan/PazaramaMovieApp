@@ -40,6 +40,9 @@ class HomeFragment : Fragment(), MovieAdapter.Listener {
         binding.rvMovies.adapter = movieAdapter
         addTextChangedListener()
         collectUiState()
+        binding.errorView.btnRetry.setOnClickListener {
+            viewModel.retry()
+        }
     }
 
     private fun collectUiState() {
@@ -50,6 +53,8 @@ class HomeFragment : Fragment(), MovieAdapter.Listener {
                     uiState.errorMessage?.let {
                         binding.errorView.root.isVisible = true
                         binding.errorView.txtError.text = it
+                    } ?: kotlin.run {
+                        binding.errorView.root.isVisible = false
                     }
                     movieAdapter.submitList(uiState.movies)
                 }

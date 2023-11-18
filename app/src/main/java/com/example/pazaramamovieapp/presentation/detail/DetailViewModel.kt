@@ -1,14 +1,14 @@
-package com.example.pazaramamovieapp.presentation.home
+package com.example.pazaramamovieapp.presentation.detail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pazaramamovieapp.domain.usecase.GetMoviesUseCase
+import com.example.pazaramamovieapp.domain.usecase.GetMovieDetailUseCase
+import com.example.pazaramamovieapp.util.NavArgs
 import com.example.pazaramamovieapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,31 +17,34 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val getMoviesUseCase: GetMoviesUseCase
+class DetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    private val getMovieDetailUseCase: GetMovieDetailUseCase
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
-    private var searchJob: Job? = null
+    private val _uiState = MutableStateFlow(DetailUiState())
+    val uiState: StateFlow<DetailUiState> = _uiState.asStateFlow()
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         _uiState.update { it.copy(isLoading = false, errorMessage = throwable.message) }
     }
 
     init {
-        getMovies()
+        val imdbId = savedStateHandle.get<String>(NavArgs.imdbID)
+        imdbId?.let {
+            getMovieDetail(it)
+        }
     }
 
-    private fun getMovies() {
+    private fun getMovieDetail(imdbId: String) {
+        _uiState.update { it.copy(isLoading = true) }
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            _uiState.update { it.copy(isLoading = true) }
-            when (val response = getMoviesUseCase(uiState.value.searchQuery)) {
+            when (val resource = getMovieDetailUseCase(imdbId)) {
                 is Resource.Success -> {
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            movies = response.data ?: emptyList(),
-                            errorMessage = null
+                            errorMessage = null,
+                            movieDetail = resource.data
                         )
                     }
                 }
@@ -50,24 +53,11 @@ class HomeViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = response.errorMessage ?: "An unexpected error occurred"
+                            errorMessage = resource.errorMessage ?: "An unexpected error occurred"
                         )
                     }
                 }
             }
-        }
-    }
-
-    fun retry() {
-        getMovies()
-    }
-
-    fun setQuery(query: String) {
-        _uiState.update { it.copy(searchQuery = query) }
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
-            delay(300)
-            getMovies()
         }
     }
 }

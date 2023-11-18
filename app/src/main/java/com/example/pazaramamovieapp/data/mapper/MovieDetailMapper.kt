@@ -2,21 +2,18 @@ package com.example.pazaramamovieapp.data.mapper
 
 import com.example.pazaramamovieapp.data.dto.MovieDetailDto
 import com.example.pazaramamovieapp.domain.model.MovieDetail
+import com.example.pazaramamovieapp.util.UtilFunctions
 
 fun MovieDetailDto.toMovieDetail(): MovieDetail {
     return MovieDetail(
-        director = director,
         genre = genre,
         imdbID = imdbID,
         imdbRating = imdbRating,
-        language = language,
+        ratingValue = UtilFunctions.convertImdbRatingToRatingBarValue(imdbRating = imdbRating),
         plot = plot,
         poster = poster,
-        production = production,
         released = released,
         runtime = runtime,
-        title = title,
-        type = type,
-        year = year
+        title = title
     )
 }
