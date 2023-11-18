@@ -7,6 +7,7 @@ import com.example.pazaramamovieapp.domain.model.Movie
 import com.example.pazaramamovieapp.domain.model.MovieDetail
 import com.example.pazaramamovieapp.domain.repository.MovieRepository
 import com.example.pazaramamovieapp.util.Resource
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class MovieRepositoryImpl @Inject constructor(

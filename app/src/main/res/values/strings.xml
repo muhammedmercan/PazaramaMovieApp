@@ -7,4 +7,6 @@
     <string name="release_date">Release date</string>
     <string name="_23_jun_1989">23 Jun 1989</string>
     <string name="poster_image">Poster Image</string>
+    <string name="search">Search</string>
+    <string name="retry">Retry</string>
 </resources>

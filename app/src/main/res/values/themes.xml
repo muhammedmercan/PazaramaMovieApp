@@ -4,6 +4,8 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="fontFamily">@font/lato</item>
+        <item name="backgroundColor">@color/background</item>
+        <item name="colorOnBackground">@color/white</item>
     </style>
 
     <style name="Theme.PazaramaMovieApp" parent="Base.Theme.PazaramaMovieApp" />
