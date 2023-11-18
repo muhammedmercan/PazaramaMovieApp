@@ -37,12 +37,21 @@ class HomeViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true) }
             when (val response = getMoviesUseCase(uiState.value.searchQuery)) {
                 is Resource.Success -> {
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            movies = response.data ?: emptyList(),
-                            errorMessage = null
-                        )
+                    response.data?.let {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                movies = response.data,
+                                errorMessage = null
+                            )
+                        }
+                    } ?: kotlin.run {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = "No movies found"
+                            )
+                        }
                     }
                 }
 
@@ -59,6 +68,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun retry() {
+        _uiState.update { it.copy(errorMessage = null) }
         getMovies()
     }
 

@@ -15,7 +15,7 @@
         android:background="@drawable/edit_text_shape"
         android:hint="@string/search"
         android:padding="16dp"
-        android:text="Batman"
+        android:text="@string/default_query"
         android:textColorHint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +54,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/editText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

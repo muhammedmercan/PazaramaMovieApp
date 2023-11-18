@@ -11,4 +11,5 @@
     <string name="retry">Retry</string>
     <string name="rating_imdb">%s (IMDB)</string>
     <string name="back_button">Back button</string>
+    <string name="default_query">Batman</string>
 </resources>
