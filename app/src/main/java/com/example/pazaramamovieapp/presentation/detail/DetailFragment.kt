@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.pazaramamovieapp.R
 import com.example.pazaramamovieapp.databinding.FragmentDetailBinding
 import com.example.pazaramamovieapp.domain.model.MovieDetail
@@ -36,6 +37,9 @@ class DetailFragment : Fragment() {
         collectUiState()
         binding.errorView.btnRetry.setOnClickListener {
             viewModel.retry()
+        }
+        binding.backButton.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 

@@ -26,7 +26,6 @@ class MovieAdapter(
                 listener.onItemClick(movie)
             }
             binding.imvPoster.loadImage(movie.poster)
-            //    binding.txtMovieName.text = movie.title
         }
     }
 
