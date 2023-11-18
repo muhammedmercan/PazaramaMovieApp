@@ -5,18 +5,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.pazaramamovieapp.databinding.FragmentHomeBinding
+import com.example.pazaramamovieapp.domain.model.Movie
 import com.example.pazaramamovieapp.presentation.home.adapter.MovieAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), MovieAdapter.Listener {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -33,9 +36,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        movieAdapter = MovieAdapter()
+        movieAdapter = MovieAdapter(this)
         binding.rvMovies.adapter = movieAdapter
-
+        addTextChangedListener()
         collectUiState()
     }
 
@@ -54,8 +57,19 @@ class HomeFragment : Fragment() {
         }
     }
 
+    private fun addTextChangedListener() {
+        binding.editText.addTextChangedListener {
+            viewModel.setQuery(it.toString())
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onItemClick(movie: Movie) {
+        val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(movie.imdbID)
+        findNavController().navigate(action)
     }
 }

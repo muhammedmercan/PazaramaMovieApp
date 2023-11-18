@@ -15,6 +15,7 @@
         android:background="@drawable/edit_text_shape"
         android:hint="@string/search"
         android:padding="16dp"
+        android:text="Batman"
         android:textColorHint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

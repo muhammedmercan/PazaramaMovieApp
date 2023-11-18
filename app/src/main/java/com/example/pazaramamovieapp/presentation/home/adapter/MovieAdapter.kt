@@ -9,14 +9,24 @@ import com.example.pazaramamovieapp.databinding.MovieItemBinding
 import com.example.pazaramamovieapp.domain.model.Movie
 import com.example.pazaramamovieapp.util.loadImage
 
-class MovieAdapter : ListAdapter<Movie, MovieAdapter.MovieViewHolder>(MovieDiffUtil()) {
-    class MovieViewHolder(
+class MovieAdapter(
+    private val listener: Listener
+) : ListAdapter<Movie, MovieAdapter.MovieViewHolder>(MovieDiffUtil()) {
+
+    interface Listener {
+        fun onItemClick(movie: Movie)
+    }
+
+    inner class MovieViewHolder(
         private val binding: MovieItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Movie) {
+            binding.root.setOnClickListener {
+                listener.onItemClick(movie)
+            }
             binding.imvPoster.loadImage(movie.poster)
-        //    binding.txtMovieName.text = movie.title
+            //    binding.txtMovieName.text = movie.title
         }
     }
 
