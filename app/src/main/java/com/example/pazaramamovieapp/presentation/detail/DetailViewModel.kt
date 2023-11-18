@@ -21,6 +21,7 @@ class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getMovieDetailUseCase: GetMovieDetailUseCase
 ) : ViewModel() {
+    private val imdbIDState = MutableStateFlow<String?>(null)
     private val _uiState = MutableStateFlow(DetailUiState())
     val uiState: StateFlow<DetailUiState> = _uiState.asStateFlow()
 
@@ -30,6 +31,7 @@ class DetailViewModel @Inject constructor(
 
     init {
         val imdbId = savedStateHandle.get<String>(NavArgs.imdbID)
+        imdbIDState.update { imdbId }
         imdbId?.let {
             getMovieDetail(it)
         }
@@ -58,6 +60,12 @@ class DetailViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun retry() {
+        imdbIDState.value?.let {
+            getMovieDetail(it)
         }
     }
 }

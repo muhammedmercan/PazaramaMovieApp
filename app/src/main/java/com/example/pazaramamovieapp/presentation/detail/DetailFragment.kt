@@ -34,6 +34,9 @@ class DetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         collectUiState()
+        binding.errorView.btnRetry.setOnClickListener {
+            viewModel.retry()
+        }
     }
 
     private fun collectUiState() {
