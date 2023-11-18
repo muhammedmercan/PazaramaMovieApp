@@ -7,12 +7,12 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface MovieApi {
-    @GET("")
+    @GET(".")
     suspend fun getMovies(
         @Query("s") searchQuery: String
     ): Response<MovieResponse>
 
-    @GET
+    @GET(".")
     suspend fun getMovieDetail(
         @Query("i") imdbID: String
     ): Response<MovieDetailDto>
