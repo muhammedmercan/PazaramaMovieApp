@@ -6,10 +6,12 @@ import com.example.pazaramamovieapp.domain.repository.MovieRepository
 import com.example.pazaramamovieapp.util.Resource
 import kotlinx.coroutines.delay
 
+const val NETWORK_DELAY = 1000L
+
 class FakeMovieRepository : MovieRepository {
     var isReturnNetworkError = false
     override suspend fun getMovies(searchQuery: String): Resource<List<Movie>> {
-        delay(1000)
+        delay(NETWORK_DELAY)
         return if (isReturnNetworkError) {
             Resource.Error("Error", null)
         } else {
@@ -22,7 +24,7 @@ class FakeMovieRepository : MovieRepository {
     }
 
     override suspend fun getMovieDetail(imdbID: String): Resource<MovieDetail> {
-        delay(1000)
+        delay(NETWORK_DELAY)
         return if (isReturnNetworkError) {
             Resource.Error("Error", null)
         } else {
