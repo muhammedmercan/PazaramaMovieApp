@@ -5,6 +5,8 @@ import com.example.pazaramamovieapp.data.repository.MovieRepositoryImpl
 import com.example.pazaramamovieapp.data.service.MovieApi
 import com.example.pazaramamovieapp.domain.repository.MovieRepository
 import com.example.pazaramamovieapp.util.Constants.BASE_URL
+import com.example.pazaramamovieapp.util.dispatcher.DefaultDispatcher
+import com.example.pazaramamovieapp.util.dispatcher.DispatcherProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,5 +47,11 @@ object AppModule {
         movieApi: MovieApi
     ): MovieRepository {
         return MovieRepositoryImpl(movieApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDispatchers(): DispatcherProvider {
+        return DefaultDispatcher()
     }
 }

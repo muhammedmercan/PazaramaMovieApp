@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pazaramamovieapp.domain.usecase.GetMoviesUseCase
 import com.example.pazaramamovieapp.util.Resource
+import com.example.pazaramamovieapp.util.dispatcher.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getMoviesUseCase: GetMoviesUseCase
+    private val getMoviesUseCase: GetMoviesUseCase,
+    private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
@@ -33,7 +34,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getMovies() {
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+        viewModelScope.launch(dispatcherProvider.IO + exceptionHandler) {
             _uiState.update { it.copy(isLoading = true) }
             when (val response = getMoviesUseCase(uiState.value.searchQuery)) {
                 is Resource.Success -> {
@@ -75,7 +76,7 @@ class HomeViewModel @Inject constructor(
     fun setQuery(query: String) {
         _uiState.update { it.copy(searchQuery = query) }
         searchJob?.cancel()
-        searchJob = viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+        searchJob = viewModelScope.launch(dispatcherProvider.IO + exceptionHandler) {
             delay(300)
             getMovies()
         }

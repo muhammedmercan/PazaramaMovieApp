@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.pazaramamovieapp.domain.usecase.GetMovieDetailUseCase
 import com.example.pazaramamovieapp.util.NavArgs
 import com.example.pazaramamovieapp.util.Resource
+import com.example.pazaramamovieapp.util.dispatcher.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getMovieDetailUseCase: GetMovieDetailUseCase
+    private val getMovieDetailUseCase: GetMovieDetailUseCase,
+    private val dispatcherProvider: DispatcherProvider
 ) : ViewModel() {
     private val imdbIDState = MutableStateFlow<String?>(null)
     private val _uiState = MutableStateFlow(DetailUiState())
@@ -39,7 +40,7 @@ class DetailViewModel @Inject constructor(
 
     private fun getMovieDetail(imdbId: String) {
         _uiState.update { it.copy(isLoading = true) }
-        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+        viewModelScope.launch(dispatcherProvider.IO + exceptionHandler) {
             when (val resource = getMovieDetailUseCase(imdbId)) {
                 is Resource.Success -> {
                     _uiState.update {
