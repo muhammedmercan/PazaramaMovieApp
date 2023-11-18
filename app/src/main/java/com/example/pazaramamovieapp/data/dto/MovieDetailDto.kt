@@ -1,6 +1,5 @@
 package com.example.pazaramamovieapp.data.dto
 
-import com.example.pazaramamovieapp.domain.model.Rating
 import com.google.gson.annotations.SerializedName
 
 data class MovieDetailDto(
@@ -20,7 +19,7 @@ data class MovieDetailDto(
     @SerializedName("Poster") val poster: String,
     @SerializedName("Production") val production: String,
     @SerializedName("Rated") val rated: String,
-    @SerializedName("Ratings") val ratings: List<Rating>,
+    @SerializedName("Ratings") val ratings: List<RatingDto>,
     @SerializedName("Released") val released: String,
     @SerializedName("Response") val response: String,
     @SerializedName("Runtime") val runtime: String,
